@@ -4,7 +4,7 @@ let nextWBDateObj = null;
 let countdownTimer = null;
 
 function formatDateUTC(d) {
-  return d.toLocaleString("en-US", {
+  return d.toLocaleString("en-GB", {
     timeZone: "UTC",
     year: "numeric",
     month: "2-digit",
