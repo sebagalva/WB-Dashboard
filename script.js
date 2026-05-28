@@ -16,7 +16,7 @@ function formatDateUTC(d) {
 }
 
 function formatDay(dateObj) {
-  return dateObj.toLocaleDateString("en-US", {
+  return dateObj.toLocaleDateString("en-GB", {
     weekday: "long",
     day: "2-digit",
     month: "long",
@@ -25,7 +25,7 @@ function formatDay(dateObj) {
 }
 
 function formatTime(dateObj) {
-  return dateObj.toLocaleTimeString("en-US", {
+  return dateObj.toLocaleTimeString("en-GB", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
