@@ -79,7 +79,8 @@ function startCountdown() {
       return;
     }
 
-    const now = new Date();
+    const now = new Date(Date.now());
+
     const diff = nextWBDateObj - now;
 
     if (diff <= 0) {
