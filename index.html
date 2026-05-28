@@ -2,35 +2,30 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>WB Dashboard</title>
+  <title>World Boss Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app">
     <header class="header">
       <h1>World Boss Dashboard</h1>
-      <span class="status" id="status">Refresh...</span>
+      <span class="status" id="status">Caricamento...</span>
     </header>
 
     <main class="grid">
       <section class="card">
-        <h2>Next WB</h2>
+        <h2>Prossimo WB</h2>
         <div class="value" id="nextWBDate">--</div>
         <div class="countdown" id="countdown">--</div>
       </section>
 
-      <section class="card">
-        <h2>Last WB</h2>
-        <div class="value" id="lastWBDate">--</div>
-      </section>
-
       <section class="card wide">
-        <h2>Future predictions</h2>
+        <h2>Previsioni future</h2>
         <table>
           <thead>
             <tr>
               <th>#</th>
-              <th>Date</th>
+              <th>Data</th>
             </tr>
           </thead>
           <tbody id="futureTable"></tbody>
