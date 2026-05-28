@@ -3,6 +3,18 @@ const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 let nextWBDateObj = null;
 let countdownTimer = null;
 
+function formatDateUTC(d) {
+  return d.toLocaleString("it-IT", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
 function formatDay(dateObj) {
   return dateObj.toLocaleDateString("it-IT", {
     weekday: "long",
@@ -97,7 +109,7 @@ function startCountdown() {
     const diff = nextWBDateObj - now;
 
     if (diff <= 0) {
-      el.innerText = "WB in progress or just spawned";
+      el.innerText = "WB in corso o appena spawnato";
       return;
     }
 
@@ -105,7 +117,7 @@ function startCountdown() {
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
 
-    el.innerText = `${h}h ${m}m ${s}s`;
+    el.innerText = `Mancano ${h}h ${m}m ${s}s`;
   }, 1000);
 }
 
