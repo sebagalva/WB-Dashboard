@@ -3,7 +3,6 @@ const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 let nextWBDateObj = null;
 let countdownTimer = null;
 
-// Format in UTC+0
 function formatDateUTC(d) {
   return d.toLocaleString("it-IT", {
     timeZone: "UTC",
@@ -18,40 +17,26 @@ function formatDateUTC(d) {
 
 async function loadData() {
   try {
-    document.getElementById("status").innerText = "Refresh...";
+    document.getElementById("status").innerText = "Aggiornamento...";
 
-    const [lastRes, nextRes] = await Promise.all([
-      fetch(`${BACKEND_URL}/lastWB`),
-      fetch(`${BACKEND_URL}/nextWB`)
-    ]);
-
-    const lastData = await lastRes.json();
+    const nextRes = await fetch(`${BACKEND_URL}/nextWB`);
     const nextData = await nextRes.json();
 
-    // Ultimo WB (UTC)
-    if (lastData.lastWB_date) {
-      const lastDate = new Date(lastData.lastWB_date); // ISO → Date
-      document.getElementById("lastWBDate").innerText = formatDateUTC(lastDate);
-    }
-
-    // Prossimo WB (UTC)
     if (nextData.error) {
       document.getElementById("nextWBDate").innerText = nextData.error;
       document.getElementById("countdown").innerText = "--";
       nextWBDateObj = null;
     } else {
-      nextWBDateObj = new Date(nextData.nextWB.date); // ISO → Date
+      nextWBDateObj = new Date(nextData.nextWB.date);
       document.getElementById("nextWBDate").innerText = formatDateUTC(nextWBDateObj);
     }
 
-    // Tabella previsioni future (UTC)
     const tbody = document.getElementById("futureTable");
     tbody.innerHTML = "";
 
     if (nextData.remainingPredictions && nextData.remainingPredictions.date) {
       nextData.remainingPredictions.date.forEach((d, idx) => {
         const dateObj = new Date(d);
-
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${idx + 1}</td>
@@ -61,13 +46,12 @@ async function loadData() {
       });
     }
 
-    // Ultimo aggiornamento (UTC)
     document.getElementById("status").innerText =
-      "Last Update: " + formatDateUTC(new Date());
+      "Ultimo aggiornamento: " + formatDateUTC(new Date());
 
   } catch (err) {
     console.error(err);
-    document.getElementById("status").innerText = "Error loading data";
+    document.getElementById("status").innerText = "Errore nel caricamento dati";
   }
 }
 
@@ -82,13 +66,11 @@ function startCountdown() {
       return;
     }
 
-    // Ora attuale in UTC
-    const now = new Date(Date.now());
-
+    const now = Date.now();
     const diff = nextWBDateObj - now;
 
     if (diff <= 0) {
-      el.innerText = "WB in progress or just spawned";
+      el.innerText = "WB in corso o appena spawnato";
       return;
     }
 
@@ -103,3 +85,4 @@ function startCountdown() {
 loadData();
 startCountdown();
 setInterval(loadData, 30000);
+
