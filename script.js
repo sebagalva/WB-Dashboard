@@ -3,6 +3,7 @@ const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 let nextWBDateObj = null;
 let countdownTimer = null;
 
+// Format in UTC+0
 function formatDateUTC(d) {
   return d.toLocaleString("it-IT", {
     timeZone: "UTC",
@@ -14,7 +15,6 @@ function formatDateUTC(d) {
     second: "2-digit"
   });
 }
-
 
 async function loadData() {
   try {
@@ -28,41 +28,43 @@ async function loadData() {
     const lastData = await lastRes.json();
     const nextData = await nextRes.json();
 
-    // Ultimo WB
+    // Ultimo WB (UTC)
     if (lastData.lastWB_date) {
-      const lastDate = new Date(lastData.lastWB_date);
-      document.getElementById("lastWBDate").innerText = formatDate(lastDate);
+      const lastDate = new Date(lastData.lastWB_date); // ISO → Date
+      document.getElementById("lastWBDate").innerText = formatDateUTC(lastDate);
     }
 
-    // Prossimo WB
+    // Prossimo WB (UTC)
     if (nextData.error) {
       document.getElementById("nextWBDate").innerText = nextData.error;
       document.getElementById("countdown").innerText = "--";
       nextWBDateObj = null;
     } else {
-      nextWBDateObj = new Date(nextData.nextWB.date);
-      document.getElementById("nextWBDate").innerText = formatDate(nextWBDateObj);
+      nextWBDateObj = new Date(nextData.nextWB.date); // ISO → Date
+      document.getElementById("nextWBDate").innerText = formatDateUTC(nextWBDateObj);
     }
 
-    // Tabella previsioni future
+    // Tabella previsioni future (UTC)
     const tbody = document.getElementById("futureTable");
     tbody.innerHTML = "";
 
     if (nextData.remainingPredictions && nextData.remainingPredictions.date) {
       nextData.remainingPredictions.date.forEach((d, idx) => {
-        const tr = document.createElement("tr");
         const dateObj = new Date(d);
 
+        const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${idx + 1}</td>
-          <td>${formatDate(dateObj)}</td>
+          <td>${formatDateUTC(dateObj)}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
+    // Ultimo aggiornamento (UTC)
     document.getElementById("status").innerText =
-      "Ultimo aggiornamento: " + formatDate(new Date());
+      "Ultimo aggiornamento: " + formatDateUTC(new Date());
+
   } catch (err) {
     console.error(err);
     document.getElementById("status").innerText = "Errore nel caricamento dati";
@@ -74,11 +76,13 @@ function startCountdown() {
 
   countdownTimer = setInterval(() => {
     const el = document.getElementById("countdown");
+
     if (!nextWBDateObj) {
       el.innerText = "--";
       return;
     }
 
+    // Ora attuale in UTC
     const now = new Date(Date.now());
 
     const diff = nextWBDateObj - now;
