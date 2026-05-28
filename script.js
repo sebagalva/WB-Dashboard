@@ -3,55 +3,82 @@ const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 let nextWBDateObj = null;
 let countdownTimer = null;
 
-function formatDateUTC(d) {
-  return d.toLocaleString("it-IT", {
-    timeZone: "UTC",
-    year: "numeric",
-    month: "2-digit",
+function formatDay(dateObj) {
+  return dateObj.toLocaleDateString("it-IT", {
+    weekday: "long",
     day: "2-digit",
+    month: "long",
+    timeZone: "UTC"
+  });
+}
+
+function formatTime(dateObj) {
+  return dateObj.toLocaleTimeString("it-IT", {
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit"
+    second: "2-digit",
+    timeZone: "UTC"
   });
 }
 
 async function loadData() {
   try {
-    document.getElementById("status").innerText = "Update...";
+    document.getElementById("status").innerText = "Aggiornamento...";
 
     const nextRes = await fetch(`${BACKEND_URL}/nextWB`);
     const nextData = await nextRes.json();
 
-    if (nextData.error) {
-      document.getElementById("nextWBDate").innerText = nextData.error;
-      document.getElementById("countdown").innerText = "--";
-      nextWBDateObj = null;
-    } else {
-      nextWBDateObj = new Date(nextData.nextWB.date);
-      document.getElementById("nextWBDate").innerText = formatDateUTC(nextWBDateObj);
-    }
+    // NEXT WB
+    nextWBDateObj = new Date(nextData.nextWB.date);
+    document.getElementById("nextWBDate").innerText = formatDateUTC(nextWBDateObj);
 
-    const tbody = document.getElementById("futureTable");
-    tbody.innerHTML = "";
+    // FUTURE PREDICTIONS
+    const container = document.getElementById("futureContainer");
+    container.innerHTML = "";
 
-    if (nextData.remainingPredictions && nextData.remainingPredictions.date) {
-      nextData.remainingPredictions.date.forEach((d, idx) => {
-        const dateObj = new Date(d);
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td>${formatDateUTC(dateObj)}</td>
-        `;
-        tbody.appendChild(tr);
+    const predictions = nextData.remainingPredictions.date.map(d => new Date(d));
+
+    // Raggruppa per giorno
+    const groups = {};
+    predictions.forEach(dateObj => {
+      const dayKey = dateObj.toISOString().split("T")[0];
+      if (!groups[dayKey]) groups[dayKey] = [];
+      groups[dayKey].push(dateObj);
+    });
+
+    const todayKey = new Date().toISOString().split("T")[0];
+
+    // Genera blocchi
+    Object.keys(groups).forEach(dayKey => {
+      const block = document.createElement("div");
+      block.className = "day-block";
+
+      if (dayKey === todayKey) block.classList.add("today");
+
+      const dayTitle = document.createElement("div");
+      dayTitle.className = "day-title";
+
+      const sampleDate = groups[dayKey][0];
+      dayTitle.innerText = formatDay(sampleDate);
+
+      block.appendChild(dayTitle);
+
+      groups[dayKey].forEach(dateObj => {
+        const entry = document.createElement("div");
+        entry.className = "day-entry";
+        entry.innerText = formatTime(dateObj);
+        block.appendChild(entry);
       });
-    }
+
+      container.appendChild(block);
+    });
 
     document.getElementById("status").innerText =
-      "Last Update: " + formatDateUTC(new Date());
+      "Ultimo aggiornamento: " + formatDateUTC(new Date());
 
   } catch (err) {
     console.error(err);
-    document.getElementById("status").innerText = "Error loading data";
+    document.getElementById("status").innerText = "Errore nel caricamento dati";
   }
 }
 
