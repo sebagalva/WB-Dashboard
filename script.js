@@ -1,5 +1,5 @@
 
-const BACKEND_URL = "https://backend-production-3dedf.up.railway.app/";
+const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 
 let nextWBDateObj = null;
 let countdownTimer = null;
