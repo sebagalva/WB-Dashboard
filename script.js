@@ -18,7 +18,7 @@ function formatDateUTC(d) {
 
 async function loadData() {
   try {
-    document.getElementById("status").innerText = "Aggiornamento...";
+    document.getElementById("status").innerText = "Refresh...";
 
     const [lastRes, nextRes] = await Promise.all([
       fetch(`${BACKEND_URL}/lastWB`),
@@ -63,11 +63,11 @@ async function loadData() {
 
     // Ultimo aggiornamento (UTC)
     document.getElementById("status").innerText =
-      "Ultimo aggiornamento: " + formatDateUTC(new Date());
+      "Last Update: " + formatDateUTC(new Date());
 
   } catch (err) {
     console.error(err);
-    document.getElementById("status").innerText = "Errore nel caricamento dati";
+    document.getElementById("status").innerText = "Error loading data";
   }
 }
 
@@ -88,7 +88,7 @@ function startCountdown() {
     const diff = nextWBDateObj - now;
 
     if (diff <= 0) {
-      el.innerText = "WB in corso o appena spawnato";
+      el.innerText = "WB in progress or just spawned";
       return;
     }
 
