@@ -96,5 +96,3 @@ function startCountdown() {
 loadData();
 startCountdown();
 setInterval(loadData, 30000);
-
-
