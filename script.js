@@ -3,8 +3,9 @@ const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 let nextWBDateObj = null;
 let countdownTimer = null;
 
-function formatDate(d) {
+function formatDateUTC(d) {
   return d.toLocaleString("it-IT", {
+    timeZone: "UTC",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -13,6 +14,7 @@ function formatDate(d) {
     second: "2-digit"
   });
 }
+
 
 async function loadData() {
   try {
