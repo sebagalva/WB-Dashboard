@@ -1,4 +1,3 @@
-
 const BACKEND_URL = "https://backend-production-3dedf.up.railway.app";
 
 let nextWBDateObj = null;
@@ -31,21 +30,16 @@ async function loadData() {
     if (lastData.lastWB_date) {
       const lastDate = new Date(lastData.lastWB_date);
       document.getElementById("lastWBDate").innerText = formatDate(lastDate);
-      document.getElementById("lastWBSerial").innerText =
-        `serial: ${lastData.lastWB_serial}`;
     }
 
     // Prossimo WB
     if (nextData.error) {
       document.getElementById("nextWBDate").innerText = nextData.error;
-      document.getElementById("nextWBSerial").innerText = "serial: --";
       document.getElementById("countdown").innerText = "--";
       nextWBDateObj = null;
     } else {
       nextWBDateObj = new Date(nextData.nextWB.date);
       document.getElementById("nextWBDate").innerText = formatDate(nextWBDateObj);
-      document.getElementById("nextWBSerial").innerText =
-        `serial: ${nextData.nextWB.serial}`;
     }
 
     // Tabella previsioni future
@@ -60,13 +54,13 @@ async function loadData() {
         tr.innerHTML = `
           <td>${idx + 1}</td>
           <td>${formatDate(dateObj)}</td>
-          <td>${nextData.remainingPredictions.serial[idx]}</td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    document.getElementById("status").innerText = "Ultimo aggiornamento: " + formatDate(new Date());
+    document.getElementById("status").innerText =
+      "Ultimo aggiornamento: " + formatDate(new Date());
   } catch (err) {
     console.error(err);
     document.getElementById("status").innerText = "Errore nel caricamento dati";
@@ -102,3 +96,5 @@ function startCountdown() {
 loadData();
 startCountdown();
 setInterval(loadData, 30000);
+
+
