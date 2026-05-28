@@ -4,7 +4,7 @@ let nextWBDateObj = null;
 let countdownTimer = null;
 
 function formatDateUTC(d) {
-  return d.toLocaleString("it-IT", {
+  return d.toLocaleString("en-US", {
     timeZone: "UTC",
     year: "numeric",
     month: "2-digit",
@@ -16,7 +16,7 @@ function formatDateUTC(d) {
 }
 
 function formatDay(dateObj) {
-  return dateObj.toLocaleDateString("it-IT", {
+  return dateObj.toLocaleDateString("en-US", {
     weekday: "long",
     day: "2-digit",
     month: "long",
@@ -25,7 +25,7 @@ function formatDay(dateObj) {
 }
 
 function formatTime(dateObj) {
-  return dateObj.toLocaleTimeString("it-IT", {
+  return dateObj.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
@@ -86,7 +86,7 @@ async function loadData() {
     });
 
     document.getElementById("status").innerText =
-      "Ultimo aggiornamento: " + formatDateUTC(new Date());
+      "Last update: " + formatDateUTC(new Date());
 
   } catch (err) {
     console.error(err);
