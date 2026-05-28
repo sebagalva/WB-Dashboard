@@ -17,7 +17,7 @@ function formatDateUTC(d) {
 
 async function loadData() {
   try {
-    document.getElementById("status").innerText = "Aggiornamento...";
+    document.getElementById("status").innerText = "Update...";
 
     const nextRes = await fetch(`${BACKEND_URL}/nextWB`);
     const nextData = await nextRes.json();
@@ -47,11 +47,11 @@ async function loadData() {
     }
 
     document.getElementById("status").innerText =
-      "Ultimo aggiornamento: " + formatDateUTC(new Date());
+      "Last Update: " + formatDateUTC(new Date());
 
   } catch (err) {
     console.error(err);
-    document.getElementById("status").innerText = "Errore nel caricamento dati";
+    document.getElementById("status").innerText = "Error loading data";
   }
 }
 
@@ -70,7 +70,7 @@ function startCountdown() {
     const diff = nextWBDateObj - now;
 
     if (diff <= 0) {
-      el.innerText = "WB in corso o appena spawnato";
+      el.innerText = "WB in progress or just spawned";
       return;
     }
 
@@ -78,7 +78,7 @@ function startCountdown() {
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
 
-    el.innerText = `Mancano ${h}h ${m}m ${s}s`;
+    el.innerText = `${h}h ${m}m ${s}s`;
   }, 1000);
 }
 
