@@ -81,29 +81,6 @@ function startCountdown() {
     el.innerText = `${h}h ${m}m ${s}s`;
   }, 1000);
 }
-.day-block {
-  margin-bottom: 18px;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.04);
-}
-
-.day-title {
-  font-weight: 600;
-  margin-bottom: 6px;
-  font-size: 1.1rem;
-  color: #9ecbff;
-}
-
-.day-entry {
-  padding: 4px 0;
-  font-size: 1rem;
-}
-
-.today {
-  background: rgba(0, 120, 255, 0.15);
-  border-left: 3px solid #4da3ff;
-}
 
 loadData();
 startCountdown();
